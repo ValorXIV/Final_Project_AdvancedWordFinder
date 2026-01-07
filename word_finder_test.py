@@ -87,11 +87,19 @@ def clean_word_list(word_list: List[str]) -> List[str]:
         cleaned_list.append(cleaned_word)
     return cleaned_list
 
-def create_anagram_dict(word_list: List[str]) -> dict[str, List[str]]:
+def create_word_id(word: str) -> tuple:
+    word_id = [0] * 26
+    for letter in word:
+        l_order = ord(letter) - ord('a')
+        word_id[l_order] += 1
+    word_id = tuple(word_id)
+    return word_id
+
+def create_anagram_dict(word_list: List[str]) -> dict[tuple, list[str]]:
     anag_dict = defaultdict(list)
     for word in word_list:
-        dict_key = "".join(sorted(word))
-        anag_dict[dict_key].append(word)
+        word_id = create_word_id(word)
+        anag_dict[word_id].append(word)
     return anag_dict
 
 def import_dict():
@@ -127,6 +135,9 @@ if __name__ == "__main__":
             user_query, a_constraint = user_query.split('/', 1)
             user_query = user_query.strip()
             a_constraint = a_constraint.strip()
+            word_id = create_word_id(a_constraint)
+            print(word_id)
+            print(anagram_dict[word_id])
             
 
         matching_pattern = user_query
