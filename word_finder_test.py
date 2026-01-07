@@ -70,14 +70,10 @@ def parse_length_constraint(constraint: str):
     
     return min_len, max_len
 
-def parse_anagram_constraint(constraint: str):
-    pass
-
 def filter_len_word_list(min_length: int, max_length: int, word_list:List[str]) -> List[str]:
     filtered_list = [
         word for word in word_list if min_length <= len(word) <= max_length
     ]
-
     return filtered_list
 
 def clean_word_list(word_list: List[str]) -> List[str]:
@@ -113,7 +109,15 @@ def import_dict():
     anagram_dict = create_anagram_dict(word_list)
     return word_list, anagram_dict
 
-
+def get_id_diff(base_id: tuple, target_id: tuple) -> int:
+    diff = 0
+    for b_cnt, t_cnt in zip(base_id, target_id):
+        res = b_cnt - t_cnt
+        if res < 0:
+            return 100000
+        diff += res
+    return diff
+    
 if __name__ == "__main__":
     
     word_list, anagram_dict = import_dict()
@@ -132,12 +136,21 @@ if __name__ == "__main__":
             current_wordlist = filter_len_word_list(min_length, max_length, word_list)
 
         if "/" in user_query: #unfinished part
+            anag_ans = []
             user_query, a_constraint = user_query.split('/', 1)
             user_query = user_query.strip()
             a_constraint = a_constraint.strip()
+            if '*' in a_constraint:
+                wildcard_cnt = 1000
+            else: 
+                wildcard_cnt = a_constraint.count('.')
+            a_constraint = a_constraint.replace('.','').replace('*','')
             word_id = create_word_id(a_constraint)
-            print(word_id)
-            print(anagram_dict[word_id])
+            for id in anagram_dict.keys():
+                if get_id_diff(id, word_id) <= wildcard_cnt:
+                    for matching_word in anagram_dict[id]:
+                        anag_ans.append(matching_word)
+            print(anag_ans)
             
 
         matching_pattern = user_query
