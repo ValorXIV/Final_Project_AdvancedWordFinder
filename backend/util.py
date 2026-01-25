@@ -1,9 +1,12 @@
 from collections import defaultdict
 
-def import_dict():
-    word_dict = input("Enter your dict file name: ")
-
-    if(word_dict):
+def import_dict(filename="UKACD.txt"):
+    try:
+        with open(filename) as d:
+            word_list = d.read().splitlines()
+    except FileNotFoundError:
+        # Fallback to input if default not found
+        word_dict = input("Enter your dict file name: ")
         with open(word_dict) as d:
             word_list = d.read().splitlines()
     

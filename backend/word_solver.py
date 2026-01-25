@@ -104,11 +104,11 @@ class Solver():
             diff += res
         return diff
 
-import util
-word_list, anagram_dict = util.import_dict()
-s = Solver()
-w = s.solve_multi_query("ABC;AeB", word_list)
-for i in w:
-    for j in i:
-        print(j,end=' ')
-    print()
+# import util
+# word_list, anagram_dict = util.import_dict()
+# s = Solver()
+# w = s.solve_multi_query("ABC;AeB", word_list)
+# for i in w:
+#     for j in i:
+#         print(j,end=' ')
+#     print()

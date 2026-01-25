@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+    --font-heading: var(--font-heading);
+    --font-sans: var(--font-sans);
+}
+
+:root {
+  --background: #0f172a; /* Slate 950 */
+  --foreground: #f8fafc; /* Slate 50 */
+    --card: #1e293b; /* Slate 800 */
+    --card-foreground: #f8fafc;
+    --primary: #3b82f6; /* Blue 500 */
+    --primary-foreground: #ffffff;
+    --muted: #334155; /* Slate 700 */
+    --muted-foreground: #94a3b8; /* Slate 400 */
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+    font-family: var(--font-sans), sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
