@@ -54,7 +54,7 @@ export default function DictionarySelector({ onDictionaryChange }: DictionarySel
             >
                 {dictionaries.map((dict) => (
                     <option key={dict} value={dict} className="bg-slate-800 text-slate-200">
-                        {dict.replace(/\.txt$/i, "")}
+                        {dict.replace(/\.txt$/i, "").toUpperCase()}
                     </option>
                 ))}
             </select>

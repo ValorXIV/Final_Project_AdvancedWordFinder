@@ -60,7 +60,7 @@ export default function Home() {
         <SearchBar
           onSearch={handleSearch}
           isLoading={isLoading}
-          onDictionaryChange={(name) => toast.success(`Dictionary swapped to ${name}`)}
+          onDictionaryChange={(name) => toast.success(`Dictionary swapped to ${name.replace(/\.txt$/i, "").toUpperCase()}`)}
         />
 
         {error && (
