@@ -76,7 +76,6 @@ class Solver():
     
         return matching_word
                 
-
     def parse_length_constraint(self, constraint: str):
         
         min_len, max_len = 1, float("inf")
