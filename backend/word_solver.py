@@ -50,7 +50,7 @@ class Solver():
 
         return matching_words
 
-    def solve_multi_query(self, pattern: str, word_list: list[str]) -> list[str]:
+    def solve_multi_query(self, pattern: str, word_list: list[str]) -> list[list[str]]:
 
         sub_pattern = pattern.split(";")
         sub_pattern = [w.strip() for w in sub_pattern]
@@ -58,20 +58,20 @@ class Solver():
 
         matching_word = []
 
-        variable_value = defaultdict(set)
+        variable_value = defaultdict(lambda: [None] * query_count)
 
-        for p in sub_pattern:
+        for i, p in enumerate(sub_pattern):
             regex = self.query_parser(p)
             compiled_regex = re.compile(regex)
             for word in word_list:
                 matching = compiled_regex.fullmatch(word)
                 if matching:
                     mg = matching.groups()
-                    variable_value[mg].add(word)
+                    variable_value[mg][i] = word
         
         for key, value in variable_value.items():
-            if len(value) == query_count:
-                print(key, value)
+            if all(v is not None for v in value):
+                # print(key, value)
                 matching_word.append(value)
     
         return matching_word

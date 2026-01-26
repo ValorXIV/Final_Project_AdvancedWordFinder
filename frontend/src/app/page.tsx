@@ -3,14 +3,18 @@
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import ResultsDisplay from "@/components/ResultsDisplay";
+import HelpModal from "@/components/HelpModal";
 import { motion } from "framer-motion";
 import { Toaster, toast } from "sonner";
+import { CircleHelp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<string[] | string[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const handleSearch = async (pattern: string, dictionary: string) => {
     setIsLoading(true);
@@ -40,8 +44,26 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-6 sm:p-24 selection:bg-blue-500/30">
+    <main className="min-h-screen p-6 sm:p-24 selection:bg-blue-500/30 relative">
       <Toaster position="top-center" />
+
+      {/* Search Help Button */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        onClick={() => setIsHelpOpen(true)}
+        className={cn(
+          "absolute top-6 right-6 sm:top-10 sm:right-10",
+          "flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-all",
+          "border border-slate-700 shadow-lg"
+        )}
+      >
+        <CircleHelp className="w-4 h-4" />
+        <span className="text-sm font-medium">How To Use?</span>
+      </motion.button>
+
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
       <div className="mx-auto w-full flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

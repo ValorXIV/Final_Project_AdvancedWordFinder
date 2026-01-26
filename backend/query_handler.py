@@ -35,7 +35,10 @@ def handle_query(user_query, word_list, anagram_dict):
     current_wordlist = util.filter_len_word_list(min_length, max_length, current_word_list)
 
     if matching_pattern:
-        results = solver.solve_single_query(matching_pattern, current_wordlist)
+        if ";" in user_query:
+            results = solver.solve_multi_query(user_query, word_list)
+        else:
+            results = solver.solve_single_query(matching_pattern, current_wordlist)
     else:
         results = anagram_ans
         
