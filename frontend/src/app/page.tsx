@@ -4,6 +4,7 @@ import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import { motion } from "framer-motion";
+import { Toaster, toast } from "sonner";
 
 export default function Home() {
   const [results, setResults] = useState<string[]>([]);
@@ -11,7 +12,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearch = async (pattern: string, length: string) => {
+  const handleSearch = async (pattern: string, dictionary: string) => {
     setIsLoading(true);
     setError(null);
     setHasSearched(true);
@@ -19,7 +20,7 @@ export default function Home() {
 
     try {
       const params = new URLSearchParams({ pattern });
-      if (length) params.append("length", length);
+      if (dictionary) params.append("dictionary", dictionary);
 
       // Note: Assumes backend is running on port 8000
       const res = await fetch(`http://localhost:8000/search?${params.toString()}`);
@@ -40,7 +41,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-6 sm:p-24 selection:bg-blue-500/30">
-      <div className="max-w-5xl mx-auto flex flex-col items-center">
+      <Toaster position="top-center" />
+      <div className="mx-auto w-full flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -55,7 +57,11 @@ export default function Home() {
           </p>
         </motion.div>
 
-        <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+        <SearchBar
+          onSearch={handleSearch}
+          isLoading={isLoading}
+          onDictionaryChange={(name) => toast.success(`Dictionary swapped to ${name}`)}
+        />
 
         {error && (
           <div className="mt-8 p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl">

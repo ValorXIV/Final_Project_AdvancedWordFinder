@@ -1,12 +1,20 @@
 from collections import defaultdict
 
+import os
+
 def import_dict(filename="UKACD.txt"):
+    # If the filename does not already contain the path, prepend it
+    if "dictionary" not in filename:
+        filename = os.path.join(os.path.dirname(__file__), "dictionary", filename)
+    
     try:
         with open(filename) as d:
             word_list = d.read().splitlines()
     except FileNotFoundError:
-        # Fallback to input if default not found
+        print(f"File {filename} not found.")
         word_dict = input("Enter your dict file name: ")
+        if "dictionary" not in word_dict:
+             word_dict = os.path.join(os.path.dirname(__file__), "dictionary", word_dict)
         with open(word_dict) as d:
             word_list = d.read().splitlines()
     

@@ -22,7 +22,7 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
         .sort((a, b) => a - b);
 
     return (
-        <div className="w-full max-w-4xl mx-auto mt-12 space-y-8">
+        <div className="w-full mx-auto mt-12 space-y-8">
             {lengths.map((len, index) => (
                 <motion.div
                     key={len}

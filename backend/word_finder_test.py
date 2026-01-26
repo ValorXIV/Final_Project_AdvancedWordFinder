@@ -23,7 +23,7 @@ while(1):
         user_query = user_query.strip()
         a_constraint = a_constraint.strip()
         if '*' in a_constraint:
-            wildcard_cnt = 1000
+            wildcard_cnt = float("inf")
         else: 
             wildcard_cnt = a_constraint.count('.')
             a_constraint = a_constraint.replace('.','').replace('*','')

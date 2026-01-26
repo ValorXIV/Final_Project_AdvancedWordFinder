@@ -79,7 +79,7 @@ class Solver():
 
     def parse_length_constraint(self, constraint: str):
         
-        min_len, max_len = 1, 100
+        min_len, max_len = 1, float("inf")
         
         if '-' not in constraint: #(6 -> exact 6 char)
             min_len = int(constraint)
@@ -100,7 +100,7 @@ class Solver():
         for b_cnt, t_cnt in zip(base_id, target_id):
             res = b_cnt - t_cnt
             if res < 0:
-                return 100000
+                return float("inf")
             diff += res
         return diff
 
