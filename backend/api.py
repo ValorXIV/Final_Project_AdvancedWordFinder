@@ -84,7 +84,7 @@ def search_words(
             load_dictionary(dictionary) # This updates global word_list and current_dict_file
         
         pattern = pattern.strip()
-        final_results = query_handler.handle_query(pattern, word_list, anagram_dict)
+        final_results, elapsed_time = query_handler.handle_query(pattern, word_list, anagram_dict)
         
         # Ensure we return a list, handle_query might return a set or list depending on implementation updates
         if isinstance(final_results, set):
@@ -93,6 +93,6 @@ def search_words(
              # Ensure it's sorted if it isn't already, though handle_query usually returns sorted or we accept it as is
              pass
 
-        return {"results": final_results}
+        return {"results": final_results, "elapsed_time": elapsed_time}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

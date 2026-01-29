@@ -5,19 +5,36 @@ import { cn } from "@/lib/utils";
 
 interface ResultsDisplayProps {
     results: string[] | string[][];
+    searchTime?: number | null;
 }
 
-export default function ResultsDisplay({ results }: ResultsDisplayProps) {
+export default function ResultsDisplay({ results, searchTime }: ResultsDisplayProps) {
     if (results.length === 0) return null;
 
     // Check if it's a 2D array (Multi Query)
     const isMultiQuery = Array.isArray(results[0]);
 
-    if (isMultiQuery) {
-        return <MultiQueryDisplay results={results as string[][]} />;
-    }
-
-    return <SingleQueryDisplay results={results as string[]} />;
+    return (
+        <div className="w-full mx-auto mt-12">
+            {searchTime !== null && searchTime !== undefined && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 text-center"
+                >
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800/70 border border-slate-700/50 rounded-lg text-slate-300 text-sm">
+                        <span className="text-emerald-400 font-medium">✓</span>
+                        Search completed in <span className="font-semibold text-white">{searchTime.toFixed(3)} s</span>
+                    </span>
+                </motion.div>
+            )}
+            {isMultiQuery ? (
+                <MultiQueryDisplay results={results as string[][]} />
+            ) : (
+                <SingleQueryDisplay results={results as string[]} />
+            )}
+        </div>
+    );
 }
 
 function MultiQueryDisplay({ results }: { results: string[][] }) {
@@ -35,7 +52,7 @@ function MultiQueryDisplay({ results }: { results: string[][] }) {
         .sort((a, b) => a - b);
 
     return (
-        <div className="w-full mx-auto mt-12 space-y-8">
+        <div className="w-full mx-auto space-y-8">
             {lengths.map((len, index) => (
                 <motion.div
                     key={len}
@@ -92,7 +109,7 @@ function SingleQueryDisplay({ results }: { results: string[] }) {
         .sort((a, b) => a - b);
 
     return (
-        <div className="w-full mx-auto mt-12 space-y-8">
+        <div className="w-full mx-auto space-y-8">
             {lengths.map((len, index) => (
                 <motion.div
                     key={len}

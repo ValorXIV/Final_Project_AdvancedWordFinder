@@ -44,7 +44,7 @@ def create_anagram_dict(word_list: list[str]) -> dict[tuple, list[str]]:
         anag_dict[word_id].append(word)
     return anag_dict
 
-def filter_len_word_list(min_length: int, max_length: int, word_list:list[str]) -> list[str]:
+def filter_len_word_list(min_length: int, max_length: int, word_list: list[str]) -> list[str]:
     filtered_list = [
         word for word in word_list if min_length <= len(word) <= max_length
     ]

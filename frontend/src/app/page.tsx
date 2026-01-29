@@ -15,12 +15,14 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [searchTime, setSearchTime] = useState<number | null>(null);
 
   const handleSearch = async (pattern: string, dictionary: string) => {
     setIsLoading(true);
     setError(null);
     setHasSearched(true);
     setResults([]);
+    setSearchTime(null);
 
     try {
       const params = new URLSearchParams({ pattern });
@@ -36,6 +38,7 @@ export default function Home() {
 
       const data = await res.json();
       setResults(data.results || []);
+      setSearchTime(data.elapsed_time || null);
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {
@@ -97,7 +100,7 @@ export default function Home() {
           </div>
         )}
 
-        <ResultsDisplay results={results} />
+        <ResultsDisplay results={results} searchTime={searchTime} />
       </div>
     </main>
   );

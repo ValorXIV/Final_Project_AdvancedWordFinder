@@ -1,23 +1,22 @@
-import re
+import regex
 from collections import defaultdict
+from typing import Tuple
 
 class Solver():
 
     def query_parser(self, pattern: str) -> str:
 
-        variable_dict = defaultdict(int)
-        variable_count = 0
+        variable_dict = set()
         regex_pattern = f""
 
         for i in range(len(pattern)):
             if(pattern[i].isupper()): #variable A,B,C etc.
                 var = pattern[i]
-                if var not in variable_dict: #save variable into dict and assign group number
-                    variable_count += 1
-                    regex_pattern += "(.+)"
-                    variable_dict[var] = variable_count
+                if var not in variable_dict: #save variable into dict
+                    regex_pattern += f"(?P<{var}>.+)" 
+                    variable_dict.add(var)
                 else:
-                    regex_pattern += f"\\{variable_dict[var]}"
+                    regex_pattern += f"(?P={var})"
             elif(pattern[i] == "*"):
                 regex_pattern += ".*"
             elif(pattern[i] == "#"):
@@ -40,10 +39,10 @@ class Solver():
 
     def solve_single_query(self, pattern: str, word_list: list[str]) -> list[str]:
 
-        regex = self.query_parser(pattern)
+        word_list = set(word_list)
+        rex = self.query_parser(pattern)
+        compiled_regex = regex.compile(rex)
         matching_words = []
-        compiled_regex = re.compile(regex)
-
         for word in word_list:
             if compiled_regex.fullmatch(word):
                 matching_words.append(word)
@@ -61,8 +60,8 @@ class Solver():
         variable_value = defaultdict(lambda: [None] * query_count)
 
         for i, p in enumerate(sub_pattern):
-            regex = self.query_parser(p)
-            compiled_regex = re.compile(regex)
+            rex = self.query_parser(p)
+            compiled_regex = regex.compile(rex)
             for word in word_list:
                 matching = compiled_regex.fullmatch(word)
                 if matching:
@@ -76,7 +75,7 @@ class Solver():
     
         return matching_word
                 
-    def parse_length_constraint(self, constraint: str):
+    def parse_length_constraint(self, constraint: str) -> Tuple[int, int]:
         
         min_len, max_len = 1, float("inf")
         
@@ -99,15 +98,20 @@ class Solver():
         for b_cnt, t_cnt in zip(base_id, target_id):
             res = b_cnt - t_cnt
             if res < 0:
-                return float("inf")
+                return float('-inf')
             diff += res
         return diff
 
-# import util
-# word_list, anagram_dict = util.import_dict()
-# s = Solver()
-# w = s.solve_multi_query("ABC;AeB", word_list)
+import util
+word_list, anagram_dict = util.import_dict()
+s = Solver()
+w = s.solve_multi_query("AaB;AiB", word_list)
 # for i in w:
 #     for j in i:
 #         print(j,end=' ')
 #     print()
+
+# w = s.solve_single_query("4:l*/tale.", word_list)
+# for ws in w:
+#     print(ws)
+# print(len(w))
