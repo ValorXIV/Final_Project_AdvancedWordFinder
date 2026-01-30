@@ -60,13 +60,20 @@ class Solver():
         variable_value = defaultdict(lambda: [None] * query_count)
 
         for i, p in enumerate(sub_pattern):
+            seen_variable = set()
+            variable_list = []
+            for v in p: 
+                if v.isupper() and v not in seen_variable:
+                    seen_variable.add(v)
+                    variable_list.append(v)
             rex = self.query_parser(p)
             compiled_regex = regex.compile(rex)
             for word in word_list:
                 matching = compiled_regex.fullmatch(word)
                 if matching:
                     mg = matching.groups()
-                    variable_value[mg][i] = word
+                    k = tuple([(var, value) for var, value in zip(variable_list, mg)])
+                    variable_value[k][i] = word
         
         for key, value in variable_value.items():
             if all(v is not None for v in value):
@@ -102,10 +109,10 @@ class Solver():
             diff += res
         return diff
 
-import util
-word_list, anagram_dict = util.import_dict()
-s = Solver()
-w = s.solve_multi_query("AaB;AiB", word_list)
+# import util
+# word_list, anagram_dict = util.import_dict()
+# s = Solver()
+# w = s.solve_multi_query("AkB;AlB", word_list)
 # for i in w:
 #     for j in i:
 #         print(j,end=' ')
